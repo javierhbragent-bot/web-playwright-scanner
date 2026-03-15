@@ -1,18 +1,18 @@
-import type { Page } from "playwright";
-import type { ScanConfig, FlowConfig } from "../config/schema.js";
-import type { NetworkInterceptor } from "../capture/network-interceptor.js";
-import type { ScreenshotCapture } from "../capture/screenshot.js";
-import type { SafetyGuard } from "../core/safety.js";
-import type { Screenshot } from "../types/common.js";
-import type { CapturedApiCall } from "../types/network.js";
-import type { DetectedState } from "../capture/state-detector.js";
-import { detectStates } from "../capture/state-detector.js";
-import { Interaction } from "./interaction.js";
-import { pageId, flowStepId } from "../utils/id.js";
-import { extractPathname } from "../utils/url.js";
-import { createChildLogger } from "../utils/logger.js";
+import type { Page } from 'playwright';
+import type { ScanConfig, FlowConfig } from '../config/schema.js';
+import type { NetworkInterceptor } from '../capture/network-interceptor.js';
+import type { ScreenshotCapture } from '../capture/screenshot.js';
+import type { SafetyGuard } from '../core/safety.js';
+import type { Screenshot } from '../types/common.js';
+import type { CapturedApiCall } from '../types/network.js';
+import type { DetectedState } from '../capture/state-detector.js';
+import { detectStates } from '../capture/state-detector.js';
+import { Interaction } from './interaction.js';
+import { pageId, flowStepId } from '../utils/id.js';
+import { extractPathname } from '../utils/url.js';
+import { createChildLogger } from '../utils/logger.js';
 
-const log = createChildLogger("flow-runner");
+const log = createChildLogger('flow-runner');
 
 export interface FlowStepCapture {
   stepId: string;
@@ -42,7 +42,7 @@ export async function runFlows(
   const captures: FlowCapture[] = [];
 
   for (const flow of config.flows) {
-    log.info({ flow: flow.name }, "Running flow");
+    log.info({ flow: flow.name }, 'Running flow');
     const flowCapture = await runSingleFlow(
       page,
       config,
@@ -82,41 +82,41 @@ async function runSingleFlow(
 
     log.debug(
       { flow: flow.name, step: i, action: step.action, description: step.description },
-      "Executing step",
+      'Executing step',
     );
 
     // Execute the action
     switch (step.action) {
-      case "navigate":
+      case 'navigate':
         if (step.url) {
           const fullUrl = new URL(step.url, config.targetUrl).href;
           await interaction.navigate(fullUrl, step.description);
         }
         break;
-      case "click":
+      case 'click':
         if (step.selector) await interaction.click(step.selector, step.description);
         break;
-      case "fill":
+      case 'fill':
         if (step.selector && step.value !== undefined)
           await interaction.fill(step.selector, step.value, step.description);
         break;
-      case "select":
+      case 'select':
         if (step.selector && step.value !== undefined)
           await interaction.select(step.selector, step.value, step.description);
         break;
-      case "hover":
+      case 'hover':
         if (step.selector) await interaction.hover(step.selector, step.description);
         break;
-      case "submit":
+      case 'submit':
         if (step.selector) await interaction.submit(step.selector, step.description);
         break;
-      case "wait":
+      case 'wait':
         await interaction.wait(step.waitAfter);
         break;
     }
 
     // Wait after action
-    if (step.action !== "wait") {
+    if (step.action !== 'wait') {
       await interaction.wait(step.waitAfter);
     }
 
@@ -144,17 +144,14 @@ async function runSingleFlow(
       order: i,
       description: step.description,
       pageId: afterPageId,
-      action: `${step.action}:${step.selector ?? step.url ?? ""}`,
+      action: `${step.action}:${step.selector ?? step.url ?? ''}`,
       apiCalls: stepApiCalls,
       states,
       screenshot,
     });
   }
 
-  log.info(
-    { flow: flow.name, steps: steps.length, apiCalls: allApiCalls.length },
-    "Flow complete",
-  );
+  log.info({ flow: flow.name, steps: steps.length, apiCalls: allApiCalls.length }, 'Flow complete');
 
   return {
     name: flow.name,

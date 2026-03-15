@@ -39,12 +39,14 @@ Turn normalized web-application exploration artifacts into a documentation and S
 ## Inputs
 
 Required:
+
 - `pages.json`
 - `flows.json`
 - `endpoints.json`
 - `components.json`
 
 Optional:
+
 - `auth.json`
 - screenshots
 - ARIA snapshots

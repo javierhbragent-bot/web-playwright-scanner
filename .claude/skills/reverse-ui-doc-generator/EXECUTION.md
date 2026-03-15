@@ -9,6 +9,7 @@ Execute the workflow in the following order.
 ## Step 1 — Load Inputs
 
 Load:
+
 - pages artifact
 - flows artifact
 - endpoints artifact
@@ -20,6 +21,7 @@ Load:
 Build a system overview before generating any docs.
 
 Deliver:
+
 - input completeness summary
 - application overview
 
@@ -28,6 +30,7 @@ Deliver:
 ## Step 2 — Analyze Structure and Coverage
 
 Determine:
+
 - routes covered
 - flows covered
 - protected areas
@@ -35,6 +38,7 @@ Determine:
 - which pages have weak or incomplete evidence
 
 Deliver:
+
 - coverage summary
 - ambiguity list
 
@@ -43,6 +47,7 @@ Deliver:
 ## Step 3 — Infer Components
 
 From repeated structures and states:
+
 - identify candidate components
 - separate page sections from reusable patterns
 - attach confidence
@@ -51,6 +56,7 @@ From repeated structures and states:
 - note auth-gated usage when relevant
 
 Deliver:
+
 - component inventory
 
 ---
@@ -58,6 +64,7 @@ Deliver:
 ## Step 4 — Interpret APIs
 
 Read normalized endpoints and generate:
+
 - endpoint summaries
 - page-level API mapping
 - flow-level API mapping
@@ -66,6 +73,7 @@ Read normalized endpoints and generate:
 For each mapping, classify the relationship as page load, user action, background, or auth.
 
 Deliver:
+
 - API documentation pack
 
 ---
@@ -73,6 +81,7 @@ Deliver:
 ## Step 5 — Generate Component Docs
 
 For each candidate reusable component, generate:
+
 - purpose
 - observed states
 - inferred states
@@ -83,6 +92,7 @@ For each candidate reusable component, generate:
 - TODO_VALIDATE notes
 
 Deliver:
+
 - component docs
 
 ---
@@ -90,6 +100,7 @@ Deliver:
 ## Step 6 — Generate Page Docs
 
 For each page, generate:
+
 - page purpose
 - visible UI elements
 - actions available
@@ -99,6 +110,7 @@ For each page, generate:
 - observed versus inferred notes
 
 Deliver:
+
 - page docs
 
 ---
@@ -106,6 +118,7 @@ Deliver:
 ## Step 7 — Generate Storybook Draft
 
 For each likely reusable component, generate:
+
 - story title
 - story/state list
 - data source notes
@@ -114,6 +127,7 @@ For each likely reusable component, generate:
 - validation TODOs
 
 Deliver:
+
 - Storybook outline pack
 
 ---
@@ -121,17 +135,20 @@ Deliver:
 ## Step 8 — Produce Review Report
 
 Review the generated documentation against the source artifacts and classify claims as:
+
 - `SUPPORTED`
 - `INFERRED`
 - `UNCERTAIN`
 
 Also list:
+
 - unsupported claims
 - weak evidence
 - missing states
 - manual review checklist
 
 Deliver:
+
 - validation report
 
 ---
@@ -139,6 +156,7 @@ Deliver:
 ## Completion Condition
 
 The run is complete when the skill has produced:
+
 - application summary
 - component inventory
 - API documentation

@@ -9,9 +9,11 @@ The skill runs in six stages.
 ## Stage 1 — Artifact Understanding
 
 ### Objective
+
 Build a clear internal understanding of the application based on the provided artifacts.
 
 ### Required Tasks
+
 - read all artifact types
 - summarize application structure
 - summarize route coverage
@@ -20,6 +22,7 @@ Build a clear internal understanding of the application based on the provided ar
 - identify missing inputs or weak evidence
 
 ### Output
+
 - `application_summary`
 - `ambiguities_list`
 
@@ -28,18 +31,22 @@ Build a clear internal understanding of the application based on the provided ar
 ## Stage 2 — Component Inference
 
 ### Objective
+
 Infer likely reusable components from repeated patterns.
 
 ### Rules
+
 - repeated UI structures across pages suggest candidate components
 - page-specific sections should not automatically become reusable components
 - observed states must come from artifacts
 - confidence must be attached to each component grouping
 
 ### Required Output
+
 - `component_inventory`
 
 Each record should include:
+
 - candidate name
 - type
 - pages observed on
@@ -57,9 +64,11 @@ Each record should include:
 ## Stage 3 — API Interpretation
 
 ### Objective
+
 Interpret raw captured traffic into readable, page-aware documentation.
 
 ### Rules
+
 - normalize endpoint patterns conservatively
 - map each endpoint to pages, flows, and components
 - classify each endpoint usage as:
@@ -70,6 +79,7 @@ Interpret raw captured traffic into readable, page-aware documentation.
 - do not infer hidden server logic
 
 ### Required Output
+
 - `api_inventory`
 - `page_api_mapping`
 - `flow_api_mapping`
@@ -80,9 +90,11 @@ Interpret raw captured traffic into readable, page-aware documentation.
 ## Stage 4 — Storybook Draft Generation
 
 ### Objective
+
 Generate a first-pass Storybook outline from observed UI behavior.
 
 ### Rules
+
 - create stories only for observed or strongly implied states
 - include related APIs in a Data Source section
 - include auth notes when relevant
@@ -90,9 +102,11 @@ Generate a first-pass Storybook outline from observed UI behavior.
 - do not invent exact source component props
 
 ### Required Output
+
 - `storybook_outline`
 
 Each component outline should include:
+
 - title
 - purpose
 - observed states
@@ -107,9 +121,11 @@ Each component outline should include:
 ## Stage 5 — Page and Component Documentation
 
 ### Objective
+
 Generate readable docs for pages and reusable UI parts.
 
 ### Page Docs Must Include
+
 - page purpose
 - visible UI elements
 - actions available
@@ -118,6 +134,7 @@ Generate readable docs for pages and reusable UI parts.
 - auth requirement
 
 ### Component Docs Must Include
+
 - component purpose
 - observed states
 - pages where seen
@@ -126,6 +143,7 @@ Generate readable docs for pages and reusable UI parts.
 - validation notes
 
 ### Required Output
+
 - `page_docs`
 - `component_docs`
 
@@ -134,9 +152,11 @@ Generate readable docs for pages and reusable UI parts.
 ## Stage 6 — Review and Validation
 
 ### Objective
+
 Prevent overclaiming and make uncertainty explicit.
 
 ### Required Tasks
+
 - detect unsupported claims
 - detect speculative descriptions
 - identify missing evidence
@@ -144,4 +164,5 @@ Prevent overclaiming and make uncertainty explicit.
 - produce a manual review checklist
 
 ### Required Output
+
 - `validation_report`

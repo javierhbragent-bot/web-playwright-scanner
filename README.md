@@ -177,7 +177,12 @@ The configuration file is a JSON file validated at runtime with Zod. All fields 
       "steps": [
         { "action": "navigate", "url": "/users/new", "description": "Go to new user form" },
         { "action": "fill", "selector": "#name", "value": "John Doe", "description": "Enter name" },
-        { "action": "fill", "selector": "#email", "value": "john@example.com", "description": "Enter email" },
+        {
+          "action": "fill",
+          "selector": "#email",
+          "value": "john@example.com",
+          "description": "Enter email"
+        },
         { "action": "click", "selector": "button[type='submit']", "description": "Submit form" }
       ]
     }
@@ -211,10 +216,10 @@ The configuration file is a JSON file validated at runtime with Zod. All fields 
 
 ### `targetUrl`
 
-| | |
-|---|---|
-| **Type** | `string` (valid URL) |
-| **Required** | Yes |
+|                 |                                                                                |
+| --------------- | ------------------------------------------------------------------------------ |
+| **Type**        | `string` (valid URL)                                                           |
+| **Required**    | Yes                                                                            |
 | **Description** | Base URL of the application to scan. All routes are resolved relative to this. |
 
 ```json
@@ -225,10 +230,10 @@ The configuration file is a JSON file validated at runtime with Zod. All fields 
 
 ### `routes`
 
-| | |
-|---|---|
-| **Type** | `string[]` |
-| **Required** | Yes |
+|                 |                                                                                                                                |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **Type**        | `string[]`                                                                                                                     |
+| **Required**    | Yes                                                                                                                            |
 | **Description** | List of URL paths to visit and document. Each route is navigated, and the page's DOM, screenshots, and API calls are captured. |
 
 ```json
@@ -239,21 +244,21 @@ The configuration file is a JSON file validated at runtime with Zod. All fields 
 
 ### `auth`
 
-| | |
-|---|---|
-| **Type** | `object` |
-| **Required** | No |
+|                 |                                                                                         |
+| --------------- | --------------------------------------------------------------------------------------- |
+| **Type**        | `object`                                                                                |
+| **Required**    | No                                                                                      |
 | **Description** | Authentication configuration. If provided, the scanner logs in before exploring routes. |
 
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `loginUrl` | `string` | — | Path to the login page (resolved relative to `targetUrl`) |
-| `credentials.username` | `string` | — | Username/email to enter |
-| `credentials.password` | `string` | — | Password to enter |
-| `credentials.usernameField` | `string` | `"email"` | Name attribute of the username input |
-| `credentials.passwordField` | `string` | `"password"` | Name attribute of the password input |
-| `submitSelector` | `string` | auto-detected | CSS selector for the submit button. If omitted, clicks the first `button[type="submit"]` or `button` |
-| `successIndicator` | `string` | — | CSS selector that must be visible after login to confirm success. If provided and not found, the scan aborts |
+| Field                       | Type     | Default       | Description                                                                                                  |
+| --------------------------- | -------- | ------------- | ------------------------------------------------------------------------------------------------------------ |
+| `loginUrl`                  | `string` | —             | Path to the login page (resolved relative to `targetUrl`)                                                    |
+| `credentials.username`      | `string` | —             | Username/email to enter                                                                                      |
+| `credentials.password`      | `string` | —             | Password to enter                                                                                            |
+| `credentials.usernameField` | `string` | `"email"`     | Name attribute of the username input                                                                         |
+| `credentials.passwordField` | `string` | `"password"`  | Name attribute of the password input                                                                         |
+| `submitSelector`            | `string` | auto-detected | CSS selector for the submit button. If omitted, clicks the first `button[type="submit"]` or `button`         |
+| `successIndicator`          | `string` | —             | CSS selector that must be visible after login to confirm success. If provided and not found, the scan aborts |
 
 ```json
 "auth": {
@@ -273,17 +278,17 @@ The configuration file is a JSON file validated at runtime with Zod. All fields 
 
 ### `flows`
 
-| | |
-|---|---|
-| **Type** | `FlowConfig[]` |
-| **Required** | No |
-| **Default** | `[]` |
+|                 |                                                                                                                                        |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **Type**        | `FlowConfig[]`                                                                                                                         |
+| **Required**    | No                                                                                                                                     |
+| **Default**     | `[]`                                                                                                                                   |
 | **Description** | User journeys to execute. Each flow is a named sequence of steps. API calls, screenshots, and state changes are captured at each step. |
 
-| Field | Type | Description |
-|---|---|---|
-| `name` | `string` | Flow name (used in artifact IDs, e.g., `flow:login`) |
-| `steps` | `FlowStep[]` | Ordered list of actions to perform |
+| Field   | Type         | Description                                          |
+| ------- | ------------ | ---------------------------------------------------- |
+| `name`  | `string`     | Flow name (used in artifact IDs, e.g., `flow:login`) |
+| `steps` | `FlowStep[]` | Ordered list of actions to perform                   |
 
 See [Flow Step Actions](#flow-step-actions) for step details.
 
@@ -305,19 +310,19 @@ See [Flow Step Actions](#flow-step-actions) for step details.
 
 ### `browser`
 
-| | |
-|---|---|
-| **Type** | `object` |
-| **Required** | No |
+|                 |                            |
+| --------------- | -------------------------- |
+| **Type**        | `object`                   |
+| **Required**    | No                         |
 | **Description** | Browser behavior settings. |
 
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `headless` | `boolean` | `true` | Run browser without a visible window. Override with `--headed` CLI flag |
-| `viewport.width` | `number` | `1280` | Browser viewport width in pixels |
-| `viewport.height` | `number` | `720` | Browser viewport height in pixels |
-| `timeout` | `number` | `30000` | Default timeout for Playwright actions (ms) |
-| `networkIdleTimeout` | `number` | `5000` | Time window after navigation during which API calls are classified as "page_load" (ms) |
+| Field                | Type      | Default | Description                                                                            |
+| -------------------- | --------- | ------- | -------------------------------------------------------------------------------------- |
+| `headless`           | `boolean` | `true`  | Run browser without a visible window. Override with `--headed` CLI flag                |
+| `viewport.width`     | `number`  | `1280`  | Browser viewport width in pixels                                                       |
+| `viewport.height`    | `number`  | `720`   | Browser viewport height in pixels                                                      |
+| `timeout`            | `number`  | `30000` | Default timeout for Playwright actions (ms)                                            |
+| `networkIdleTimeout` | `number`  | `5000`  | Time window after navigation during which API calls are classified as "page_load" (ms) |
 
 ```json
 "browser": {
@@ -332,17 +337,17 @@ See [Flow Step Actions](#flow-step-actions) for step details.
 
 ### `safety`
 
-| | |
-|---|---|
-| **Type** | `object` |
-| **Required** | No |
+|                 |                                                           |
+| --------------- | --------------------------------------------------------- |
+| **Type**        | `object`                                                  |
+| **Required**    | No                                                        |
 | **Description** | Safety controls to prevent the scanner from causing harm. |
 
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `maxRequestsPerMinute` | `number` | `60` | Rate limit for navigation requests |
-| `blockedUrlPatterns` | `string[]` | `[]` | URL patterns to block (supports `**` and `*` wildcards) |
-| `blockDestructiveMethods` | `boolean` | `true` | Block HTTP DELETE requests |
+| Field                     | Type       | Default | Description                                             |
+| ------------------------- | ---------- | ------- | ------------------------------------------------------- |
+| `maxRequestsPerMinute`    | `number`   | `60`    | Rate limit for navigation requests                      |
+| `blockedUrlPatterns`      | `string[]` | `[]`    | URL patterns to block (supports `**` and `*` wildcards) |
+| `blockDestructiveMethods` | `boolean`  | `true`  | Block HTTP DELETE requests                              |
 
 ```json
 "safety": {
@@ -356,19 +361,19 @@ See [Flow Step Actions](#flow-step-actions) for step details.
 
 ### `apiCapture`
 
-| | |
-|---|---|
-| **Type** | `object` |
-| **Required** | No |
+|                 |                                                                             |
+| --------------- | --------------------------------------------------------------------------- |
+| **Type**        | `object`                                                                    |
+| **Required**    | No                                                                          |
 | **Description** | Controls which network requests are captured and how much data is recorded. |
 
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `includePatterns` | `string[]` | `["**/api/**"]` | URL patterns to capture (wildcards supported) |
-| `excludePatterns` | `string[]` | `["**/*.js", "**/*.css", ...]` | URL patterns to exclude |
-| `captureHeaders` | `boolean` | `false` | Include request headers in captured data |
-| `capturePayloads` | `boolean` | `true` | Include request/response bodies |
-| `maxPayloadSize` | `number` | `10240` | Max payload size in bytes (truncated beyond this) |
+| Field             | Type       | Default                        | Description                                       |
+| ----------------- | ---------- | ------------------------------ | ------------------------------------------------- |
+| `includePatterns` | `string[]` | `["**/api/**"]`                | URL patterns to capture (wildcards supported)     |
+| `excludePatterns` | `string[]` | `["**/*.js", "**/*.css", ...]` | URL patterns to exclude                           |
+| `captureHeaders`  | `boolean`  | `false`                        | Include request headers in captured data          |
+| `capturePayloads` | `boolean`  | `true`                         | Include request/response bodies                   |
+| `maxPayloadSize`  | `number`   | `10240`                        | Max payload size in bytes (truncated beyond this) |
 
 ```json
 "apiCapture": {
@@ -384,15 +389,15 @@ See [Flow Step Actions](#flow-step-actions) for step details.
 
 ### `output`
 
-| | |
-|---|---|
-| **Type** | `object` |
-| **Required** | No |
+|                 |                                          |
+| --------------- | ---------------------------------------- |
+| **Type**        | `object`                                 |
+| **Required**    | No                                       |
 | **Description** | Controls where output files are written. |
 
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `directory` | `string` | `"./output"` | Root output directory. Override with `-o` CLI flag |
+| Field            | Type     | Default         | Description                                            |
+| ---------------- | -------- | --------------- | ------------------------------------------------------ |
+| `directory`      | `string` | `"./output"`    | Root output directory. Override with `-o` CLI flag     |
 | `screenshotsDir` | `string` | `"screenshots"` | Subdirectory for screenshots (relative to `directory`) |
 
 ```json
@@ -408,26 +413,26 @@ See [Flow Step Actions](#flow-step-actions) for step details.
 
 Each step in a flow has an `action` type that determines what the scanner does:
 
-| Action | Required Fields | Description |
-|---|---|---|
-| `navigate` | `url` | Navigate to a URL (resolved relative to `targetUrl`) |
-| `click` | `selector` | Click an element matching the CSS selector |
-| `fill` | `selector`, `value` | Clear and type a value into an input field |
-| `select` | `selector`, `value` | Select an option in a `<select>` dropdown |
-| `hover` | `selector` | Hover over an element |
-| `submit` | `selector` | Programmatically submit a `<form>` element |
-| `wait` | — | Wait for `waitAfter` milliseconds (default: 1000) |
+| Action     | Required Fields     | Description                                          |
+| ---------- | ------------------- | ---------------------------------------------------- |
+| `navigate` | `url`               | Navigate to a URL (resolved relative to `targetUrl`) |
+| `click`    | `selector`          | Click an element matching the CSS selector           |
+| `fill`     | `selector`, `value` | Clear and type a value into an input field           |
+| `select`   | `selector`, `value` | Select an option in a `<select>` dropdown            |
+| `hover`    | `selector`          | Hover over an element                                |
+| `submit`   | `selector`          | Programmatically submit a `<form>` element           |
+| `wait`     | —                   | Wait for `waitAfter` milliseconds (default: 1000)    |
 
 ### Common step fields
 
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `action` | `string` | — | One of the actions above (required) |
-| `selector` | `string` | — | CSS selector for the target element |
-| `value` | `string` | — | Value to type or select |
-| `url` | `string` | — | URL for `navigate` action |
-| `description` | `string` | — | Human-readable step description (required) |
-| `waitAfter` | `number` | `1000` | Milliseconds to wait after the action completes |
+| Field         | Type     | Default | Description                                     |
+| ------------- | -------- | ------- | ----------------------------------------------- |
+| `action`      | `string` | —       | One of the actions above (required)             |
+| `selector`    | `string` | —       | CSS selector for the target element             |
+| `value`       | `string` | —       | Value to type or select                         |
+| `url`         | `string` | —       | URL for `navigate` action                       |
+| `description` | `string` | —       | Human-readable step description (required)      |
+| `waitAfter`   | `number` | `1000`  | Milliseconds to wait after the action completes |
 
 ### Example flow
 
@@ -436,11 +441,25 @@ Each step in a flow has an `action` type that determines what the scanner does:
   "name": "search-and-filter",
   "steps": [
     { "action": "navigate", "url": "/products", "description": "Go to products page" },
-    { "action": "fill", "selector": "input[name='search']", "value": "laptop", "description": "Type search term" },
+    {
+      "action": "fill",
+      "selector": "input[name='search']",
+      "value": "laptop",
+      "description": "Type search term"
+    },
     { "action": "click", "selector": ".search-btn", "description": "Click search" },
     { "action": "wait", "description": "Wait for results", "waitAfter": 2000 },
-    { "action": "select", "selector": "#sort-by", "value": "price-asc", "description": "Sort by price" },
-    { "action": "click", "selector": ".product-card:first-child", "description": "Open first result" }
+    {
+      "action": "select",
+      "selector": "#sort-by",
+      "value": "price-asc",
+      "description": "Sort by price"
+    },
+    {
+      "action": "click",
+      "selector": ".product-card:first-child",
+      "description": "Open first result"
+    }
   ]
 }
 ```
@@ -606,13 +625,14 @@ Detected component types: `form`, `table`, `dialog`.
 
 Captured API calls are classified into three categories:
 
-| Category | When | Example |
-|---|---|---|
-| **page_load** | Fires within the network idle window after a navigation event, before any user action | Initial data fetch when a page loads |
-| **user_action** | Fires during a user interaction (click, fill, submit) | Form submission, button click triggers API |
-| **background** | Fires outside navigation and user action windows | Polling, telemetry, heartbeat |
+| Category        | When                                                                                  | Example                                    |
+| --------------- | ------------------------------------------------------------------------------------- | ------------------------------------------ |
+| **page_load**   | Fires within the network idle window after a navigation event, before any user action | Initial data fetch when a page loads       |
+| **user_action** | Fires during a user interaction (click, fill, submit)                                 | Form submission, button click triggers API |
+| **background**  | Fires outside navigation and user action windows                                      | Polling, telemetry, heartbeat              |
 
 Each captured call records:
+
 - HTTP method and full URL
 - Normalized endpoint pattern (e.g., `/api/users/:id`)
 - Request/response payloads (if `capturePayloads` is enabled)
@@ -678,17 +698,31 @@ Scan product pages and execute a search flow:
       "name": "product-search",
       "steps": [
         { "action": "navigate", "url": "/products", "description": "Go to products" },
-        { "action": "fill", "selector": "#search", "value": "headphones", "description": "Search for headphones" },
+        {
+          "action": "fill",
+          "selector": "#search",
+          "value": "headphones",
+          "description": "Search for headphones"
+        },
         { "action": "click", "selector": ".search-submit", "description": "Submit search" },
         { "action": "wait", "description": "Wait for results", "waitAfter": 2000 },
-        { "action": "click", "selector": ".product-card:first-child a", "description": "Open first product" }
+        {
+          "action": "click",
+          "selector": ".product-card:first-child a",
+          "description": "Open first product"
+        }
       ]
     },
     {
       "name": "add-to-cart",
       "steps": [
         { "action": "navigate", "url": "/products/1", "description": "Go to product detail" },
-        { "action": "select", "selector": "#quantity", "value": "2", "description": "Select quantity" },
+        {
+          "action": "select",
+          "selector": "#quantity",
+          "value": "2",
+          "description": "Select quantity"
+        },
         { "action": "click", "selector": ".add-to-cart-btn", "description": "Add to cart" },
         { "action": "wait", "description": "Wait for cart update", "waitAfter": 1500 }
       ]
@@ -724,9 +758,9 @@ npm run build
 
 ### Environment Variables
 
-| Variable | Default | Description |
-|---|---|---|
-| `LOG_LEVEL` | `info` | Logging level (`debug`, `info`, `warn`, `error`). Also set via `--verbose` flag |
+| Variable    | Default | Description                                                                     |
+| ----------- | ------- | ------------------------------------------------------------------------------- |
+| `LOG_LEVEL` | `info`  | Logging level (`debug`, `info`, `warn`, `error`). Also set via `--verbose` flag |
 
 ---
 

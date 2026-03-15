@@ -23,6 +23,7 @@ Use it to produce:
 If artifacts do not already exist, use the `web-playwright-scanner` to collect them. See [SCANNER.md](SCANNER.md) for the full process.
 
 Summary:
+
 1. Ask the user the questions from the checklist (target URL, routes, auth, flows, API patterns, safety, output, browser mode).
 2. Generate a `scan-config.json` from the answers.
 3. Run the scanner: `npx tsx src/index.ts --config scan-config.json`
@@ -46,12 +47,14 @@ Turn normalized web-application exploration artifacts into a documentation and S
 ## Inputs
 
 Required:
+
 - `pages.json`
 - `flows.json`
 - `endpoints.json`
 - `components.json`
 
 Optional:
+
 - `auth.json`
 - screenshots
 - ARIA snapshots

@@ -1,7 +1,7 @@
-
 # API–UI Documentation Functional Model
 
 ## Purpose
+
 Define functional requirements for documenting a web application by linking UI pages,
 user interactions, and API calls discovered during automated exploration.
 
@@ -11,11 +11,13 @@ This document describes required system behaviors and artifacts, not implementat
 ---
 
 ## Page-Level API Mapping
+
 Every documented page must include the API interactions that occur on that page.
 
 Documentation must associate browser-visible API calls with the UI pages where they occur.
 
 Required fields:
+
 - page URL or route
 - API endpoint
 - HTTP method
@@ -43,6 +45,7 @@ Requests triggered automatically such as polling or telemetry.
 User flows must include the API interactions triggered at each step.
 
 Each flow must record:
+
 - flow name
 - ordered steps
 - UI actions taken
@@ -72,6 +75,7 @@ Each component record should include related APIs when interactions are observed
 Maintain a global inventory of all detected APIs.
 
 Each endpoint record must include:
+
 - endpoint pattern
 - HTTP methods observed
 - request examples
@@ -85,22 +89,26 @@ Each endpoint record must include:
 ## Artifact Relationship Model
 
 Pages
+
 - UI elements
 - Screenshots
 - Components used
 - APIs used
 
 Components
+
 - States
 - Screenshots
 - Related APIs
 
 Flows
+
 - Steps
 - Screens
 - APIs triggered
 
 Endpoints
+
 - Methods
 - Request examples
 - Response examples

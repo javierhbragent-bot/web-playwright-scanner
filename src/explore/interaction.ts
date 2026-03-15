@@ -1,9 +1,9 @@
-import type { Page } from "playwright";
-import type { NetworkInterceptor } from "../capture/network-interceptor.js";
-import type { SafetyGuard } from "../core/safety.js";
-import { createChildLogger } from "../utils/logger.js";
+import type { Page } from 'playwright';
+import type { NetworkInterceptor } from '../capture/network-interceptor.js';
+import type { SafetyGuard } from '../core/safety.js';
+import { createChildLogger } from '../utils/logger.js';
 
-const log = createChildLogger("interaction");
+const log = createChildLogger('interaction');
 
 export class Interaction {
   constructor(
@@ -13,22 +13,18 @@ export class Interaction {
   ) {}
 
   async click(selector: string, description: string): Promise<void> {
-    log.debug({ selector, description }, "Click");
+    log.debug({ selector, description }, 'Click');
     this.interceptor.markActionStart(`click:${description}`);
     try {
       await this.page.locator(selector).first().click();
-      await this.page.waitForLoadState("networkidle").catch(() => {});
+      await this.page.waitForLoadState('networkidle').catch(() => {});
     } finally {
       this.interceptor.markActionEnd();
     }
   }
 
-  async fill(
-    selector: string,
-    value: string,
-    description: string,
-  ): Promise<void> {
-    log.debug({ selector, description }, "Fill");
+  async fill(selector: string, value: string, description: string): Promise<void> {
+    log.debug({ selector, description }, 'Fill');
     this.interceptor.markActionStart(`fill:${description}`);
     try {
       await this.page.locator(selector).first().fill(value);
@@ -37,12 +33,8 @@ export class Interaction {
     }
   }
 
-  async select(
-    selector: string,
-    value: string,
-    description: string,
-  ): Promise<void> {
-    log.debug({ selector, description }, "Select");
+  async select(selector: string, value: string, description: string): Promise<void> {
+    log.debug({ selector, description }, 'Select');
     this.interceptor.markActionStart(`select:${description}`);
     try {
       await this.page.locator(selector).first().selectOption(value);
@@ -52,7 +44,7 @@ export class Interaction {
   }
 
   async hover(selector: string, description: string): Promise<void> {
-    log.debug({ selector, description }, "Hover");
+    log.debug({ selector, description }, 'Hover');
     this.interceptor.markActionStart(`hover:${description}`);
     try {
       await this.page.locator(selector).first().hover();
@@ -62,23 +54,23 @@ export class Interaction {
   }
 
   async submit(selector: string, description: string): Promise<void> {
-    log.debug({ selector, description }, "Submit");
+    log.debug({ selector, description }, 'Submit');
     this.interceptor.markActionStart(`submit:${description}`);
     try {
       const form = this.page.locator(selector).first();
       await form.evaluate((el) => {
         if (el instanceof HTMLFormElement) el.submit();
       });
-      await this.page.waitForLoadState("networkidle").catch(() => {});
+      await this.page.waitForLoadState('networkidle').catch(() => {});
     } finally {
       this.interceptor.markActionEnd();
     }
   }
 
   async navigate(url: string, description: string): Promise<void> {
-    log.debug({ url, description }, "Navigate");
+    log.debug({ url, description }, 'Navigate');
     await this.safety.waitForRateLimit();
-    await this.page.goto(url, { waitUntil: "networkidle" });
+    await this.page.goto(url, { waitUntil: 'networkidle' });
   }
 
   async wait(ms: number): Promise<void> {

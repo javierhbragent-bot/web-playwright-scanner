@@ -1,6 +1,6 @@
-import type { FlowArtifact } from "../types/artifacts.js";
-import type { FlowCapture } from "../explore/flow-runner.js";
-import { flowId } from "../utils/id.js";
+import type { FlowArtifact } from '../types/artifacts.js';
+import type { FlowCapture } from '../explore/flow-runner.js';
+import { flowId } from '../utils/id.js';
 
 export function buildFlows(captures: FlowCapture[]): FlowArtifact[] {
   return captures.map((capture) => ({

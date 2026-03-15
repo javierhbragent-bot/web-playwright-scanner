@@ -10,12 +10,7 @@
     },
     "successIndicator": ".dashboard"
   },
-  "routes": [
-    "/",
-    "/dashboard",
-    "/users",
-    "/settings"
-  ],
+  "routes": ["/", "/dashboard", "/users", "/settings"],
   "flows": [
     {
       "name": "login",

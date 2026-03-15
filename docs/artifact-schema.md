@@ -1,4 +1,3 @@
-
 # Artifact Schema
 
 ## Purpose
@@ -98,24 +97,29 @@ Each endpoint record must include:
 ## Artifact Relationships
 
 Pages reference:
+
 - components
 - APIs
 - screenshots
 
 Flows reference:
+
 - pages
 - APIs
 
 Components reference:
+
 - pages
 - APIs
 
 Endpoints reference:
+
 - pages
 - flows
 - components
 
 Authentication artifact links to:
+
 - login flows
 - protected pages
 

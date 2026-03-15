@@ -1,6 +1,6 @@
-import type { EndpointArtifact } from "../types/artifacts.js";
-import type { CapturedApiCall } from "../types/network.js";
-import { endpointId } from "../utils/id.js";
+import type { EndpointArtifact } from '../types/artifacts.js';
+import type { CapturedApiCall } from '../types/network.js';
+import { endpointId } from '../utils/id.js';
 
 export function buildEndpoints(apiCalls: CapturedApiCall[]): EndpointArtifact[] {
   // Group by endpoint pattern

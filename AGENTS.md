@@ -80,9 +80,11 @@ The scanner transforms data through 7 stages:
 ### `src/config/` — Configuration Loading and Validation
 
 #### `loader.ts`
+
 Reads a JSON file from disk, parses it, and runs it through Zod validation. If validation fails, the error propagates and the scan aborts. The validated config object is the single source of truth for the entire scan.
 
 #### `schema.ts`
+
 Defines the shape and defaults of the scan configuration. Key defaults that affect behavior:
 
 - **Browser**: headless mode on, 1280x720 viewport, 30s timeout, 5s network idle window
@@ -97,6 +99,7 @@ The auth section is optional. If absent, the scanner skips authentication entire
 ### `src/core/` — Orchestration, Browser, Safety, Sessions
 
 #### `scanner.ts` — The Orchestrator
+
 This is the main pipeline. It runs these steps in order:
 
 1. Create screenshot output directory
@@ -112,6 +115,7 @@ This is the main pipeline. It runs these steps in order:
 If any step throws, the browser is still closed (finally block).
 
 #### `browser.ts` — Browser Lifecycle
+
 Manages a single Chromium instance and a single browser context. The context persists across all page navigations, which means cookies and session state carry over between routes. The viewport and timeout are set from config.
 
 #### `safety.ts` — Rate Limiting and Request Blocking
@@ -119,13 +123,16 @@ Manages a single Chromium instance and a single browser context. The context per
 **Rate limiting algorithm**: Maintains an array of timestamps for recent requests. On each check, it removes timestamps older than 60 seconds (sliding window). If the remaining count exceeds `maxRequestsPerMinute`, `waitForRateLimit()` polls every 100ms until the window clears.
 
 **Request blocking**: Checks two conditions:
+
 1. If `blockDestructiveMethods` is true and the HTTP method is DELETE → block
 2. If the URL matches any pattern in `blockedUrlPatterns` → block
 
 Pattern matching uses the glob logic from `utils/url.ts`.
 
 #### `session.ts` — Authentication Session Persistence
+
 After login, saves three things:
+
 1. All cookies from the browser context
 2. All localStorage key-value pairs (via `page.evaluate`)
 3. All sessionStorage key-value pairs (via `page.evaluate`)
@@ -145,6 +152,7 @@ Can restore this state to a new page/context. Also detects which session mechani
 3. **`response`** — When the response arrives, looks up the pending request, captures response status/payload, categorizes the call, and pushes it to the `calls` array.
 
 **Categorization logic** (the core decision):
+
 - If the request happened within `networkIdleTimeout` (default 5s) after the last navigation → **`page_load`**
 - If `actionInProgress` flag is true (set by Interaction class during clicks/fills/submits) → **`user_action`**
 - Otherwise → **`background`**
@@ -157,17 +165,18 @@ Can restore this state to a new page/context. Also detects which session mechani
 
 Runs a single `page.evaluate()` call that extracts 7 element categories from the live DOM:
 
-| Category | What it finds | Key data captured |
-|---|---|---|
-| **Headings** | h1–h6 | level (1-6), text content |
-| **Buttons** | `<button>`, `[role="button"]`, `input[type=submit/button]` | text, CSS selector, disabled state |
-| **Links** | `<a href>` | text, href, CSS selector |
-| **Forms** | `<form>` with child inputs | selector, action URL, method, array of inputs (name, type, label, required, value) |
-| **Tables** | `<table>` | selector, header texts, row count |
-| **Dialogs** | `<dialog>`, `[role="dialog"]`, `.modal` | open state, title, selector |
-| **Alerts** | `[role="alert"]`, `.alert`, `.notification`, `.toast` | text, type (from class name), selector |
+| Category     | What it finds                                              | Key data captured                                                                  |
+| ------------ | ---------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| **Headings** | h1–h6                                                      | level (1-6), text content                                                          |
+| **Buttons**  | `<button>`, `[role="button"]`, `input[type=submit/button]` | text, CSS selector, disabled state                                                 |
+| **Links**    | `<a href>`                                                 | text, href, CSS selector                                                           |
+| **Forms**    | `<form>` with child inputs                                 | selector, action URL, method, array of inputs (name, type, label, required, value) |
+| **Tables**   | `<table>`                                                  | selector, header texts, row count                                                  |
+| **Dialogs**  | `<dialog>`, `[role="dialog"]`, `.modal`                    | open state, title, selector                                                        |
+| **Alerts**   | `[role="alert"]`, `.alert`, `.notification`, `.toast`      | text, type (from class name), selector                                             |
 
 **Selector generation algorithm**: For each element, generates a CSS selector using this priority:
+
 1. If element has an `id` → `#theId`
 2. If element has classes → `tag.class1.class2`
 3. If element is the only child of its type under parent → `parent > tag`
@@ -185,15 +194,15 @@ Also supports element-level screenshots via `page.locator(selector).screenshot()
 
 Detects 7 UI states by checking for the presence of specific CSS selectors in the DOM:
 
-| State | Selectors checked | Logic |
-|---|---|---|
-| **loading** | `[class*="loading"]`, `[class*="spinner"]`, `[class*="skeleton"]`, `[role="progressbar"]`, `.loader`, `[aria-busy="true"]` | First visible match wins |
-| **empty** | `[class*="empty"]`, `[class*="no-data"]`, `[class*="no-results"]`, `[class*="placeholder"]` | First visible match wins |
-| **error** | `[class*="error"]`, `[role="alert"]`, `[class*="danger"]`, `[class*="failure"]` | Must be visible AND have text content |
-| **success** | `[class*="success"]`, `[class*="toast"]`, `[class*="notification"]` | First visible match wins |
-| **disabled** | `button:disabled`, `input:disabled`, `[disabled]` | Any disabled element on page |
-| **dialog_open** | `dialog[open]`, `[role="dialog"]`, `.modal.show` | First visible match wins |
-| **validation** | `[class*="validation"]`, `[class*="invalid"]`, `.field-error`, `[aria-invalid="true"]` | First visible match wins |
+| State           | Selectors checked                                                                                                          | Logic                                 |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| **loading**     | `[class*="loading"]`, `[class*="spinner"]`, `[class*="skeleton"]`, `[role="progressbar"]`, `.loader`, `[aria-busy="true"]` | First visible match wins              |
+| **empty**       | `[class*="empty"]`, `[class*="no-data"]`, `[class*="no-results"]`, `[class*="placeholder"]`                                | First visible match wins              |
+| **error**       | `[class*="error"]`, `[role="alert"]`, `[class*="danger"]`, `[class*="failure"]`                                            | Must be visible AND have text content |
+| **success**     | `[class*="success"]`, `[class*="toast"]`, `[class*="notification"]`                                                        | First visible match wins              |
+| **disabled**    | `button:disabled`, `input:disabled`, `[disabled]`                                                                          | Any disabled element on page          |
+| **dialog_open** | `dialog[open]`, `[role="dialog"]`, `.modal.show`                                                                           | First visible match wins              |
+| **validation**  | `[class*="validation"]`, `[class*="invalid"]`, `.field-error`, `[aria-invalid="true"]`                                     | First visible match wins              |
 
 "Visible" means `getComputedStyle(el).display !== "none"`.
 
@@ -204,6 +213,7 @@ Detects 7 UI states by checking for the presence of specific CSS selectors in th
 #### `route-explorer.ts` — Route-by-Route Scanning
 
 For each route in the config:
+
 1. Wait for rate limit clearance
 2. Build full URL from `targetUrl + route`
 3. Set the interceptor's current page context (so API calls get tagged to this page)
@@ -220,6 +230,7 @@ If navigation fails (timeout, DNS error, etc.), the route is skipped and the sca
 #### `auth-handler.ts` — Login Flow
 
 Executes when `config.auth` is present:
+
 1. Navigate to `targetUrl + loginUrl`
 2. Analyze the login page DOM (captures form structure)
 3. Fill the username field: finds `input[name="{usernameField}"]` and types the username
@@ -234,6 +245,7 @@ Executes when `config.auth` is present:
 #### `flow-runner.ts` — User Journey Replay
 
 For each configured flow:
+
 1. Clear the interceptor's call buffer
 2. For each step in the flow:
    a. Record which page we're on
@@ -249,11 +261,13 @@ For each configured flow:
 #### `interaction.ts` — Safe Action Execution
 
 Wraps Playwright actions with interceptor action tracking. Every action method:
+
 1. Calls `interceptor.markActionStart(description)` — sets the `actionInProgress` flag so any API calls during the action get categorized as `user_action`
 2. Executes the Playwright action
 3. Calls `interceptor.markActionEnd()` — clears the flag
 
 **Actions supported**:
+
 - **click**: `page.locator(selector).click()` + wait for network idle
 - **fill**: `page.locator(selector).clear()` then `fill(value)`
 - **select**: `page.locator(selector).selectOption(value)`
@@ -269,6 +283,7 @@ Wraps Playwright actions with interceptor action tracking. Every action method:
 #### `artifact-builder.ts` — Assembly Orchestrator
 
 Takes all raw captures and assembles the final ScanOutput:
+
 1. `buildPages(pageCaptures)` → PageArtifact[]
 2. `buildFlows(flowCaptures)` → FlowArtifact[]
 3. `buildEndpoints(allApiCalls)` → EndpointArtifact[]
@@ -279,14 +294,17 @@ Takes all raw captures and assembles the final ScanOutput:
 8. Return complete ScanOutput
 
 #### `page-builder.ts`
+
 Transforms each PageCapture into a PageArtifact. Direct mapping of route, title, DOM snapshot, auth status. Extracts screenshot IDs and API call IDs. Filters detected states to only include those where `detected: true`.
 
 #### `flow-builder.ts`
+
 Transforms each FlowCapture into a FlowArtifact. Maps step captures to FlowStep objects. Collects unique page IDs and API call IDs across all steps.
 
 #### `endpoint-builder.ts` — Endpoint Grouping
 
 Groups individual API calls into endpoint patterns:
+
 1. For each API call, normalize the URL to an endpoint pattern (via `normalizeEndpointPattern`)
 2. Group calls by their normalized pattern
 3. For each group: collect unique HTTP methods, pick one request/response example per method, collect unique page IDs
@@ -295,6 +313,7 @@ Groups individual API calls into endpoint patterns:
 #### `component-builder.ts` — Component Detection
 
 Scans page DOMs for three specific HTML element types:
+
 - **Forms** (`<form>`) — Named by joining input `name` attributes (e.g., "Form: email-password")
 - **Tables** (`<table>`) — Named by first 3 header texts (e.g., "Table: Name, Status, Date")
 - **Dialogs** (`<dialog>`, `[role="dialog"]`, `.modal`) — Named by title element or index
@@ -302,6 +321,7 @@ Scans page DOMs for three specific HTML element types:
 Uses a `seen` Set to deduplicate across pages. Only detects native HTML elements — custom React/Vue components that don't use these tags are NOT detected by the scanner (the reverse-ui-doc-generator skill infers those later from repeated DOM patterns).
 
 #### `auth-builder.ts`
+
 Builds the AuthenticationArtifact from the auth handler's result. Extracts login form inputs from the DOM snapshot, identifies the login API endpoint (the first POST call during login), records the redirect URL, and gets the session mechanism type from SessionManager.
 
 #### `cross-reference.ts` — Bidirectional Link Wiring
@@ -321,16 +341,17 @@ This is the final processing step. It mutates the built artifacts to establish r
 ### `src/output/` — File Writing
 
 #### `writer.ts`
+
 Creates the output directory (recursive mkdir) and writes these files:
 
-| File | Content |
-|---|---|
-| `scan-output.json` | Complete ScanOutput object (everything in one file) |
-| `pages.json` | PageArtifact array only |
-| `flows.json` | FlowArtifact array only |
-| `endpoints.json` | EndpointArtifact array only |
-| `components.json` | ComponentArtifact array only |
-| `screenshots.json` | Screenshot metadata array |
+| File                  | Content                                              |
+| --------------------- | ---------------------------------------------------- |
+| `scan-output.json`    | Complete ScanOutput object (everything in one file)  |
+| `pages.json`          | PageArtifact array only                              |
+| `flows.json`          | FlowArtifact array only                              |
+| `endpoints.json`      | EndpointArtifact array only                          |
+| `components.json`     | ComponentArtifact array only                         |
+| `screenshots.json`    | Screenshot metadata array                            |
 | `authentication.json` | AuthenticationArtifact (only if auth was configured) |
 
 All files are pretty-printed JSON (2-space indent). Screenshots PNGs are written separately by the ScreenshotCapture class during the explore phase.
@@ -340,27 +361,29 @@ All files are pretty-printed JSON (2-space indent). Screenshots PNGs are written
 ### `src/utils/` — Shared Utilities
 
 #### `logger.ts`
+
 Pino-based structured JSON logger. Log level from `LOG_LEVEL` env var (default: "info"). `createChildLogger(name)` creates a child logger with a `module` field for filtering.
 
 #### `id.ts` — Deterministic Artifact IDs
 
 All artifact IDs are deterministic (not random UUIDs). Format: `type:identifier`.
 
-| ID function | Format | Example |
-|---|---|---|
-| `pageId("/users")` | `page:{route}` | `page:/users` |
-| `endpointId("GET", "/api/users/:id")` | `endpoint:METHOD:pattern` | `endpoint:GET:/api/users/:id` |
-| `flowId("login")` | `flow:{name}` | `flow:login` |
-| `flowStepId("login", 0)` | `flowstep:{name}:{order}` | `flowstep:login:0` |
-| `componentId("form", "/login", 0)` | `component:{type}:{route}:{index}` | `component:form:/login:0` |
-| `screenshotId(route, label, ts)` | `screenshot:{route}:{label}:{timestamp}` | `screenshot:/:default:2026-...` |
-| `apiCallId(method, url, ts)` | `apicall:{method}:{url}:{timestamp}` | `apicall:GET:https://...` |
+| ID function                           | Format                                   | Example                         |
+| ------------------------------------- | ---------------------------------------- | ------------------------------- |
+| `pageId("/users")`                    | `page:{route}`                           | `page:/users`                   |
+| `endpointId("GET", "/api/users/:id")` | `endpoint:METHOD:pattern`                | `endpoint:GET:/api/users/:id`   |
+| `flowId("login")`                     | `flow:{name}`                            | `flow:login`                    |
+| `flowStepId("login", 0)`              | `flowstep:{name}:{order}`                | `flowstep:login:0`              |
+| `componentId("form", "/login", 0)`    | `component:{type}:{route}:{index}`       | `component:form:/login:0`       |
+| `screenshotId(route, label, ts)`      | `screenshot:{route}:{label}:{timestamp}` | `screenshot:/:default:2026-...` |
+| `apiCallId(method, url, ts)`          | `apicall:{method}:{url}:{timestamp}`     | `apicall:GET:https://...`       |
 
 Route normalization: strips trailing slashes, ensures leading slash.
 
 #### `url.ts` — URL Normalization and Pattern Matching
 
 **Endpoint normalization** (`normalizeEndpointPattern`): Takes a full URL, extracts the pathname, and replaces dynamic segments with `:id`:
+
 - Numeric segments (`/users/123`) → `/users/:id`
 - UUIDs (`/items/550e8400-e29b-...`) → `/items/:id`
 - MongoDB ObjectIds (24-char hex like `/docs/507f1f77bcf86cd799439011`) → `/docs/:id`
@@ -368,6 +391,7 @@ Route normalization: strips trailing slashes, ensures leading slash.
 This groups API calls to the same endpoint regardless of which specific resource was accessed.
 
 **Pattern matching** (`matchesPattern`): Converts glob patterns to regex:
+
 - `**` → matches any number of path segments (`.*`)
 - `*` → matches within a single segment (`[^/]*`)
 - `?` → matches a single character (`.`)
@@ -394,6 +418,7 @@ Brief summary of the data structures (see the artifact JSON files for concrete e
 ### `docs/reverse-ui-doc-generator/` — Documentation Generation Skill
 
 Contains the reverse-ui-doc-generator skill source files. This skill takes the scanner's JSON output artifacts and generates human-readable documentation:
+
 - Component inventory (inferred reusable components beyond forms/tables/dialogs)
 - Page documentation
 - API documentation
@@ -411,6 +436,7 @@ Same files as `docs/reverse-ui-doc-generator/`, installed for Claude to use as a
 ## Key Algorithms
 
 ### Network Call Categorization
+
 ```
 if (now - lastNavigationTime) < networkIdleTimeout (5s)
   → page_load
@@ -419,18 +445,22 @@ else if actionInProgress flag is set
 else
   → background
 ```
+
 The `actionInProgress` flag is toggled by the Interaction class around every click/fill/submit action.
 
 ### Rate Limiting (Sliding Window)
+
 ```
 on each request:
   1. remove timestamps older than 60s from the window
   2. if window.length >= maxRequestsPerMinute → wait
   3. else → add current timestamp, proceed
 ```
+
 Wait polling interval: 100ms.
 
 ### Endpoint URL Normalization
+
 ```
 pathname segments are checked against:
   /^\d+$/           → numeric ID      → replace with :id
@@ -439,7 +469,9 @@ pathname segments are checked against:
 ```
 
 ### Cross-Reference Wiring Order
+
 The order matters because later steps depend on earlier ones:
+
 1. Pages ↔ Components (component pageIds → page componentIds)
 2. Flows → Endpoints (flow API calls → endpoint flowIds)
 3. Auth → Protected Pages (non-login pages → auth protectedPageIds)

@@ -1,19 +1,14 @@
-import type { ArtifactId, Screenshot, Timestamp } from "./common.js";
-import type { DomSnapshot } from "./dom.js";
+import type { ArtifactId, Screenshot, Timestamp } from './common.js';
+import type { DomSnapshot } from './dom.js';
 
 export interface AuthenticationArtifact {
   id: ArtifactId;
   loginRoute: string;
-  authType: "form" | "oauth" | "sso" | "other";
+  authType: 'form' | 'oauth' | 'sso' | 'other';
   loginInputs: { name: string; type: string; label?: string }[];
   loginApiEndpoint: string | null;
   redirectAfterLogin: string | null;
-  sessionMechanism:
-    | "cookie"
-    | "localStorage"
-    | "sessionStorage"
-    | "token"
-    | "unknown";
+  sessionMechanism: 'cookie' | 'localStorage' | 'sessionStorage' | 'token' | 'unknown';
   relatedFlowIds: ArtifactId[];
   protectedPageIds: ArtifactId[];
 }

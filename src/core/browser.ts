@@ -1,13 +1,8 @@
-import {
-  chromium,
-  type Browser,
-  type BrowserContext,
-  type Page,
-} from "playwright";
-import type { ScanConfig } from "../config/schema.js";
-import { createChildLogger } from "../utils/logger.js";
+import { chromium, type Browser, type BrowserContext, type Page } from 'playwright';
+import type { ScanConfig } from '../config/schema.js';
+import { createChildLogger } from '../utils/logger.js';
 
-const log = createChildLogger("browser");
+const log = createChildLogger('browser');
 
 export class BrowserManager {
   private browser: Browser | null = null;
@@ -16,7 +11,7 @@ export class BrowserManager {
   constructor(private config: ScanConfig) {}
 
   async launch(): Promise<BrowserContext> {
-    log.info("Launching browser");
+    log.info('Launching browser');
     this.browser = await chromium.launch({
       headless: this.config.browser.headless,
     });
@@ -28,18 +23,18 @@ export class BrowserManager {
   }
 
   async newPage(): Promise<Page> {
-    if (!this.context) throw new Error("Browser not launched");
+    if (!this.context) throw new Error('Browser not launched');
     return this.context.newPage();
   }
 
   getContext(): BrowserContext {
-    if (!this.context) throw new Error("Browser not launched");
+    if (!this.context) throw new Error('Browser not launched');
     return this.context;
   }
 
   async close(): Promise<void> {
     if (this.browser) {
-      log.info("Closing browser");
+      log.info('Closing browser');
       await this.browser.close();
       this.browser = null;
       this.context = null;

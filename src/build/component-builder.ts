@@ -1,6 +1,6 @@
-import type { ComponentArtifact } from "../types/artifacts.js";
-import type { PageCapture } from "../explore/route-explorer.js";
-import { componentId } from "../utils/id.js";
+import type { ComponentArtifact } from '../types/artifacts.js';
+import type { PageCapture } from '../explore/route-explorer.js';
+import { componentId } from '../utils/id.js';
 
 export function buildComponents(pageCaptures: PageCapture[]): ComponentArtifact[] {
   const components: ComponentArtifact[] = [];
@@ -9,18 +9,20 @@ export function buildComponents(pageCaptures: PageCapture[]): ComponentArtifact[
   for (const page of pageCaptures) {
     // Forms as components
     page.dom.forms.forEach((form, idx) => {
-      const id = componentId("form", page.route, idx);
+      const id = componentId('form', page.route, idx);
       if (seen.has(id)) return;
       seen.add(id);
 
       const name =
-        form.inputs.map((i) => i.name).filter(Boolean).join("-") ||
-        `form-${idx}`;
+        form.inputs
+          .map((i) => i.name)
+          .filter(Boolean)
+          .join('-') || `form-${idx}`;
 
       components.push({
         id,
         name: `Form: ${name}`,
-        type: "form",
+        type: 'form',
         pageIds: [page.pageId],
         states: [],
         screenshotIds: [],
@@ -31,18 +33,16 @@ export function buildComponents(pageCaptures: PageCapture[]): ComponentArtifact[
 
     // Tables as components
     page.dom.tables.forEach((table, idx) => {
-      const id = componentId("table", page.route, idx);
+      const id = componentId('table', page.route, idx);
       if (seen.has(id)) return;
       seen.add(id);
 
-      const name = table.headers.length > 0
-        ? table.headers.slice(0, 3).join(", ")
-        : `table-${idx}`;
+      const name = table.headers.length > 0 ? table.headers.slice(0, 3).join(', ') : `table-${idx}`;
 
       components.push({
         id,
         name: `Table: ${name}`,
-        type: "table",
+        type: 'table',
         pageIds: [page.pageId],
         states: [],
         screenshotIds: [],
@@ -53,16 +53,16 @@ export function buildComponents(pageCaptures: PageCapture[]): ComponentArtifact[
 
     // Dialogs as components
     page.dom.dialogs.forEach((dialog, idx) => {
-      const id = componentId("dialog", page.route, idx);
+      const id = componentId('dialog', page.route, idx);
       if (seen.has(id)) return;
       seen.add(id);
 
       components.push({
         id,
         name: `Dialog: ${dialog.title ?? `dialog-${idx}`}`,
-        type: "dialog",
+        type: 'dialog',
         pageIds: [page.pageId],
-        states: [{ name: dialog.open ? "open" : "closed" }],
+        states: [{ name: dialog.open ? 'open' : 'closed' }],
         screenshotIds: [],
         relatedFlowIds: [],
         relatedApiCallIds: [],

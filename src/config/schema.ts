@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const AuthConfigSchema = z.object({
   loginUrl: z.string(),
   credentials: z.object({
-    usernameField: z.string().default("email"),
-    passwordField: z.string().default("password"),
+    usernameField: z.string().default('email'),
+    passwordField: z.string().default('password'),
     username: z.string(),
     password: z.string(),
   }),
@@ -13,15 +13,7 @@ const AuthConfigSchema = z.object({
 });
 
 const FlowStepConfigSchema = z.object({
-  action: z.enum([
-    "navigate",
-    "click",
-    "fill",
-    "select",
-    "hover",
-    "wait",
-    "submit",
-  ]),
+  action: z.enum(['navigate', 'click', 'fill', 'select', 'hover', 'wait', 'submit']),
   selector: z.string().optional(),
   value: z.string().optional(),
   url: z.string().optional(),
@@ -41,8 +33,8 @@ export const ScanConfigSchema = z.object({
   flows: z.array(FlowConfigSchema).default([]),
   output: z
     .object({
-      directory: z.string().default("./output"),
-      screenshotsDir: z.string().default("screenshots"),
+      directory: z.string().default('./output'),
+      screenshotsDir: z.string().default('screenshots'),
     })
     .default({}),
   browser: z
@@ -67,17 +59,10 @@ export const ScanConfigSchema = z.object({
     .default({}),
   apiCapture: z
     .object({
-      includePatterns: z.array(z.string()).default(["**/api/**"]),
+      includePatterns: z.array(z.string()).default(['**/api/**']),
       excludePatterns: z
         .array(z.string())
-        .default([
-          "**/*.js",
-          "**/*.css",
-          "**/*.png",
-          "**/*.jpg",
-          "**/*.svg",
-          "**/*.woff*",
-        ]),
+        .default(['**/*.js', '**/*.css', '**/*.png', '**/*.jpg', '**/*.svg', '**/*.woff*']),
       captureHeaders: z.boolean().default(false),
       capturePayloads: z.boolean().default(true),
       maxPayloadSize: z.number().default(10240),

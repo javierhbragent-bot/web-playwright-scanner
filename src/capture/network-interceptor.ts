@@ -1,36 +1,47 @@
-import type { Page, Request, Response } from "playwright";
-import type { CapturedApiCall, ApiCategory } from "../types/network.js";
-import type { ArtifactId } from "../types/common.js";
-import type { ScanConfig } from "../config/schema.js";
-import { normalizeEndpointPattern, isStaticAsset, matchesPattern } from "../utils/url.js";
-import { apiCallId } from "../utils/id.js";
-import { createChildLogger } from "../utils/logger.js";
+import type { Page, Request, Response } from 'playwright';
+import type { CapturedApiCall, ApiCategory } from '../types/network.js';
+import type { ArtifactId } from '../types/common.js';
+import type { ScanConfig } from '../config/schema.js';
+import { normalizeEndpointPattern, isStaticAsset, matchesPattern } from '../utils/url.js';
+import { apiCallId } from '../utils/id.js';
+import { createChildLogger } from '../utils/logger.js';
 
-const log = createChildLogger("network-interceptor");
+const log = createChildLogger('network-interceptor');
 
 export class NetworkInterceptor {
   private calls: CapturedApiCall[] = [];
-  private currentPageId: ArtifactId = "";
+  private currentPageId: ArtifactId = '';
   private lastNavigationTime = 0;
   private actionInProgress = false;
   private currentActionDescription: string | null = null;
   private navigationWindow: number;
-  private pendingRequests = new Map<string, { method: string; url: string; headers: Record<string, string>; postData: string | null; timestamp: string; category: ApiCategory; triggerAction: string | null }>();
+  private pendingRequests = new Map<
+    string,
+    {
+      method: string;
+      url: string;
+      headers: Record<string, string>;
+      postData: string | null;
+      timestamp: string;
+      category: ApiCategory;
+      triggerAction: string | null;
+    }
+  >();
 
   constructor(private config: ScanConfig) {
     this.navigationWindow = config.browser.networkIdleTimeout;
   }
 
   attach(page: Page): void {
-    page.on("framenavigated", () => {
+    page.on('framenavigated', () => {
       this.lastNavigationTime = Date.now();
     });
 
-    page.on("request", (request: Request) => {
+    page.on('request', (request: Request) => {
       this.onRequest(request);
     });
 
-    page.on("response", (response: Response) => {
+    page.on('response', (response: Response) => {
       this.onResponse(response);
     });
   }
@@ -52,22 +63,17 @@ export class NetworkInterceptor {
   private shouldCapture(url: string): boolean {
     if (isStaticAsset(url)) return false;
 
-    const hasInclude = this.config.apiCapture.includePatterns.some((p) =>
-      matchesPattern(url, p),
-    );
+    const hasInclude = this.config.apiCapture.includePatterns.some((p) => matchesPattern(url, p));
     if (!hasInclude) return false;
 
-    const isExcluded = this.config.apiCapture.excludePatterns.some((p) =>
-      matchesPattern(url, p),
-    );
+    const isExcluded = this.config.apiCapture.excludePatterns.some((p) => matchesPattern(url, p));
     return !isExcluded;
   }
 
   private categorize(): ApiCategory {
-    if (this.actionInProgress) return "user_action";
-    if (Date.now() - this.lastNavigationTime < this.navigationWindow)
-      return "page_load";
-    return "background";
+    if (this.actionInProgress) return 'user_action';
+    if (Date.now() - this.lastNavigationTime < this.navigationWindow) return 'page_load';
+    return 'background';
   }
 
   private onRequest(request: Request): void {
@@ -109,10 +115,7 @@ export class NetworkInterceptor {
       try {
         requestPayload = JSON.parse(pending.postData);
       } catch {
-        requestPayload = pending.postData.slice(
-          0,
-          this.config.apiCapture.maxPayloadSize,
-        );
+        requestPayload = pending.postData.slice(0, this.config.apiCapture.maxPayloadSize);
       }
     }
 
@@ -149,16 +152,14 @@ export class NetworkInterceptor {
     this.calls.push(call);
     log.debug(
       { method: call.method, url: call.endpointPattern, category: call.category },
-      "Captured API call",
+      'Captured API call',
     );
   }
 
   setFlowStepId(stepId: ArtifactId): void {
     // Tag subsequent calls with the flow step
     // Applied retroactively after markActionEnd
-    const recentCalls = this.calls.filter(
-      (c) => c.category === "user_action" && !c.flowStepId,
-    );
+    const recentCalls = this.calls.filter((c) => c.category === 'user_action' && !c.flowStepId);
     for (const call of recentCalls) {
       call.flowStepId = stepId;
     }

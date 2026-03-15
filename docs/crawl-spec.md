@@ -1,4 +1,3 @@
-
 # Crawl Specification
 
 ## Purpose
@@ -44,6 +43,7 @@ The login flow record must include:
 Example conceptual flow:
 
 Login Flow
+
 1. Navigate to /login
 2. Enter email and password
 3. Submit form
@@ -57,6 +57,7 @@ Login Flow
 The crawler must inspect a predefined set of important routes.
 
 Examples:
+
 - home page
 - dashboard
 - authentication pages
@@ -65,6 +66,7 @@ Examples:
 - settings pages
 
 Routes should be prioritized based on:
+
 - business importance
 - feature complexity
 - UI richness
@@ -110,10 +112,12 @@ For each page and component pattern attempt to capture:
 ## Evidence Types to Collect
 
 ### Visual Evidence
+
 - page screenshots
 - component screenshots
 
 ### Structural Evidence
+
 - headings
 - buttons
 - links
@@ -123,11 +127,13 @@ For each page and component pattern attempt to capture:
 - dialogs
 
 ### Behavioral Evidence
+
 - navigation transitions
 - interaction outcomes
 - UI state changes
 
 ### Network Evidence
+
 - API requests
 - request payloads
 - response payloads

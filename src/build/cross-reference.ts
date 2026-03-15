@@ -1,14 +1,9 @@
-import type { ScanOutput } from "../types/artifacts.js";
-import type { CapturedApiCall } from "../types/network.js";
+import type { ScanOutput } from '../types/artifacts.js';
+import type { CapturedApiCall } from '../types/network.js';
 
-export function crossReference(
-  output: ScanOutput,
-  allApiCalls: CapturedApiCall[],
-): void {
+export function crossReference(output: ScanOutput, allApiCalls: CapturedApiCall[]): void {
   // Build lookup maps
-  const endpointByPattern = new Map(
-    output.endpoints.map((e) => [e.endpointPattern, e]),
-  );
+  const endpointByPattern = new Map(output.endpoints.map((e) => [e.endpointPattern, e]));
 
   // 1. Pages <-> Components
   for (const component of output.components) {
@@ -46,9 +41,7 @@ export function crossReference(
     // Find login-related flows
     output.authentication.relatedFlowIds = output.flows
       .filter(
-        (f) =>
-          f.name.toLowerCase().includes("login") ||
-          f.name.toLowerCase().includes("auth"),
+        (f) => f.name.toLowerCase().includes('login') || f.name.toLowerCase().includes('auth'),
       )
       .map((f) => f.id);
   }
@@ -83,7 +76,7 @@ export function crossReference(
   // 6. Flag pages with no API calls (missing API detection)
   for (const page of output.pages) {
     if (page.apiCallIds.length === 0) {
-      page.states.push({ name: "no_api_interactions" });
+      page.states.push({ name: 'no_api_interactions' });
     }
   }
 }

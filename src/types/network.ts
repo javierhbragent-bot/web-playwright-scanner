@@ -1,6 +1,6 @@
-import type { ArtifactId, Timestamp } from "./common.js";
+import type { ArtifactId, Timestamp } from './common.js';
 
-export type ApiCategory = "page_load" | "user_action" | "background";
+export type ApiCategory = 'page_load' | 'user_action' | 'background';
 
 export interface CapturedApiCall {
   id: ArtifactId;

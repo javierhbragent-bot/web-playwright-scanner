@@ -1,18 +1,18 @@
-import type { ScanOutput } from "../types/artifacts.js";
-import type { Screenshot } from "../types/common.js";
-import type { CapturedApiCall } from "../types/network.js";
-import type { PageCapture } from "../explore/route-explorer.js";
-import type { FlowCapture } from "../explore/flow-runner.js";
-import type { AuthResult } from "../explore/auth-handler.js";
-import { buildPages } from "./page-builder.js";
-import { buildFlows } from "./flow-builder.js";
-import { buildEndpoints } from "./endpoint-builder.js";
-import { buildComponents } from "./component-builder.js";
-import { buildAuth } from "./auth-builder.js";
-import { crossReference } from "./cross-reference.js";
-import { createChildLogger } from "../utils/logger.js";
+import type { ScanOutput } from '../types/artifacts.js';
+import type { Screenshot } from '../types/common.js';
+import type { CapturedApiCall } from '../types/network.js';
+import type { PageCapture } from '../explore/route-explorer.js';
+import type { FlowCapture } from '../explore/flow-runner.js';
+import type { AuthResult } from '../explore/auth-handler.js';
+import { buildPages } from './page-builder.js';
+import { buildFlows } from './flow-builder.js';
+import { buildEndpoints } from './endpoint-builder.js';
+import { buildComponents } from './component-builder.js';
+import { buildAuth } from './auth-builder.js';
+import { crossReference } from './cross-reference.js';
+import { createChildLogger } from '../utils/logger.js';
 
-const log = createChildLogger("artifact-builder");
+const log = createChildLogger('artifact-builder');
 
 export function buildArtifacts(
   targetUrl: string,
@@ -22,7 +22,7 @@ export function buildArtifacts(
   authResult: AuthResult | null,
   allApiCalls: CapturedApiCall[],
 ): ScanOutput {
-  log.info("Building artifacts");
+  log.info('Building artifacts');
 
   const pages = buildPages(pageCaptures);
   const flows = buildFlows(flowCaptures);
@@ -66,7 +66,7 @@ export function buildArtifacts(
       components: components.length,
       screenshots: screenshots.length,
     },
-    "Artifacts built",
+    'Artifacts built',
   );
 
   return output;

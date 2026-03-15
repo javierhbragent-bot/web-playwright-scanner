@@ -32,15 +32,15 @@ If the user is unsure, suggest starting with `/` and any top-level navigation li
 
 If yes, ask:
 
-| Question | Config Field | Default |
-|---|---|---|
-| What is the login page URL path? | `auth.loginUrl` | — |
-| What username/email should be used? | `auth.credentials.username` | — |
-| What password should be used? | `auth.credentials.password` | — |
-| What is the name attribute of the username input? | `auth.credentials.usernameField` | `"email"` |
-| What is the name attribute of the password input? | `auth.credentials.passwordField` | `"password"` |
-| CSS selector for the submit button? (optional, auto-detected) | `auth.submitSelector` | auto |
-| CSS selector visible after successful login? (optional) | `auth.successIndicator` | — |
+| Question                                                      | Config Field                     | Default      |
+| ------------------------------------------------------------- | -------------------------------- | ------------ |
+| What is the login page URL path?                              | `auth.loginUrl`                  | —            |
+| What username/email should be used?                           | `auth.credentials.username`      | —            |
+| What password should be used?                                 | `auth.credentials.password`      | —            |
+| What is the name attribute of the username input?             | `auth.credentials.usernameField` | `"email"`    |
+| What is the name attribute of the password input?             | `auth.credentials.passwordField` | `"password"` |
+| CSS selector for the submit button? (optional, auto-detected) | `auth.submitSelector`            | auto         |
+| CSS selector visible after successful login? (optional)       | `auth.successIndicator`          | —            |
 
 ### 4. User Flows (optional)
 
@@ -64,6 +64,7 @@ If yes, for each flow ask:
 Ask if the app uses a different API path convention (e.g., `**/graphql**`, `**/v1/**`, `**/rest/**`).
 
 Also ask:
+
 - Any API paths to exclude? (e.g., telemetry, analytics)
 - Should request/response headers be captured? (default: no)
 - Should request/response payloads be captured? (default: yes)
@@ -73,6 +74,7 @@ Also ask:
 > Are there any URLs that should be blocked during scanning? (e.g., delete endpoints, admin destructive actions)
 
 Defaults:
+
 - Destructive HTTP methods (DELETE) are blocked
 - Rate limit: 60 requests/minute
 
@@ -178,15 +180,15 @@ npx tsx src/index.ts --config scan-config.json --output ./my-results
 
 After the scanner completes, the output directory contains the artifacts needed by the reverse-ui-doc-generator skill:
 
-| Scanner Output File | Skill Input Artifact |
-|---|---|
-| `pages.json` | pages artifact |
-| `flows.json` | flows artifact |
-| `endpoints.json` | endpoints artifact |
-| `components.json` | components artifact |
-| `authentication.json` | auth artifact (optional) |
-| `screenshots/` | screenshots (optional) |
-| `scan-output.json` | complete scan (all artifacts combined) |
+| Scanner Output File   | Skill Input Artifact                   |
+| --------------------- | -------------------------------------- |
+| `pages.json`          | pages artifact                         |
+| `flows.json`          | flows artifact                         |
+| `endpoints.json`      | endpoints artifact                     |
+| `components.json`     | components artifact                    |
+| `authentication.json` | auth artifact (optional)               |
+| `screenshots/`        | screenshots (optional)                 |
+| `scan-output.json`    | complete scan (all artifacts combined) |
 
 The skill can proceed with documentation generation once these files exist in the output directory.
 

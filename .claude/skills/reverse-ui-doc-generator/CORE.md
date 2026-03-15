@@ -19,6 +19,7 @@ The skill transforms **captured evidence** into **human-readable documentation**
 The source of truth is the crawler output, not the live site and not assumptions.
 
 Primary sources:
+
 - `pages.json`
 - `flows.json`
 - `endpoints.json`
@@ -34,7 +35,9 @@ Primary sources:
 The skill must produce documentation across five areas:
 
 ### 1. Pages
+
 For each page:
+
 - purpose
 - visible UI elements
 - user actions
@@ -43,7 +46,9 @@ For each page:
 - auth requirement
 
 ### 2. Components
+
 For each likely reusable UI component:
+
 - candidate name
 - type
 - where observed
@@ -52,7 +57,9 @@ For each likely reusable UI component:
 - confidence level
 
 ### 3. APIs
+
 For each endpoint:
+
 - readable summary
 - pages using it
 - flows triggering it
@@ -60,14 +67,18 @@ For each endpoint:
 - classification of usage
 
 ### 4. Storybook Draft
+
 For each reusable component:
+
 - story outline
 - state list
 - data source notes
 - validation TODOs
 
 ### 5. Review Report
+
 A final report showing:
+
 - supported claims
 - inferred claims
 - uncertain claims
