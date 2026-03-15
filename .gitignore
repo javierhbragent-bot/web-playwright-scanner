@@ -4,8 +4,6 @@ node_modules/
 # Build
 dist/
 
-# Scan output
-output/
 
 # OS
 .DS_Store
