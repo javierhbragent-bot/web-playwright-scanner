@@ -1,0 +1,17 @@
+{
+  "targetUrl": "https://foyer.metuur.com",
+  "routes": ["/", "/features", "/pricing", "/faq"],
+  "browser": {
+    "headless": true,
+    "timeout": 30000,
+    "networkIdleTimeout": 5000
+  },
+  "apiCapture": {
+    "includePatterns": ["**/api/**"],
+    "capturePayloads": true
+  },
+  "output": {
+    "directory": "/Users/javierhbr/others/javierhbr/code/tulio-multi-agency/test-web-scanner",
+    "screenshotsDir": "screenshots"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "skill_name": "reverse-ui-doc-generator",
+  "skill_type": "analysis_and_generation",
+  "context_model": "three_layer_context",
+  "requires_live_access": false,
+  "requires_browser": false,
+  "requires_crawler_output": true,
+  "can_trigger_scanner": true,
+  "scanner": {
+    "tool": "web-playwright-scanner",
+    "run_command": "npx tsx src/index.ts --config scan-config.json",
+    "config_reference": "SCANNER.md",
+    "questions_checklist": [
+      "target URL (required)",
+      "routes to scan (required)",
+      "authentication config (optional)",
+      "user flows to capture (optional)",
+      "API capture patterns (optional, default: **/api/**)",
+      "blocked URL patterns for safety (optional)",
+      "output directory (optional, default: ./output)",
+      "browser mode: headed or headless (optional, default: headless)"
+    ]
+  },
+  "inputs": [
+    "pages.json",
+    "flows.json",
+    "endpoints.json",
+    "components.json",
+    "auth.json (optional)",
+    "screenshots (optional)",
+    "aria snapshots (optional)"
+  ],
+  "outputs": [
+    "component inventory",
+    "page documentation",
+    "API documentation",
+    "Storybook draft outline",
+    "validation report"
+  ],
+  "workflow_steps": [
+    "collect artifacts (if needed, via scanner)",
+    "artifact understanding",
+    "component inference",
+    "API interpretation",
+    "Storybook draft generation",
+    "page/component documentation",
+    "review and validation"
+  ],
+  "rules": [
+    "work only from provided artifacts",
+    "never invent hidden backend behavior",
+    "never assume exact source-code component APIs unless confirmed",
+    "always separate OBSERVED, INFERRED, and UNKNOWN",
+    "include page-level API mapping",
+    "include authentication requirements when present"
+  ]
+}

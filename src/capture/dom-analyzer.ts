@@ -8,7 +8,7 @@ export async function analyzeDom(page: Page): Promise<DomSnapshot> {
   log.debug({ url: page.url() }, "Analyzing DOM");
 
   return page.evaluate(() => {
-    function getSelector(el: Element): string {
+    const getSelector = (el: Element): string => {
       if (el.id) return `#${el.id}`;
       const tag = el.tagName.toLowerCase();
       const classes = Array.from(el.classList).join(".");
@@ -21,7 +21,7 @@ export async function analyzeDom(page: Page): Promise<DomSnapshot> {
       if (siblings.length === 1) return `${parent.tagName.toLowerCase()} > ${tag}`;
       const index = siblings.indexOf(el) + 1;
       return `${tag}:nth-of-type(${index})`;
-    }
+    };
 
     const headings = Array.from(
       document.querySelectorAll("h1, h2, h3, h4, h5, h6"),
